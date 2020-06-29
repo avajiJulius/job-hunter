@@ -7,23 +7,35 @@ import java.net.Socket;
 public class Server {
 
     public static void main(String[] args) throws IOException {
-        ServerSocket socket = new ServerSocket(17711);
+        ServerSocket socket = new ServerSocket(17711, 200);
         System.out.println("Server is started");
 
-        while(true) {
-            try {
-                Socket client = socket.accept();
-                handelRequest(client);
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        while (true) {
+            Socket client = socket.accept();
+            new SimpleServer(client).start();
         }
+
+
+    }
+}
+
+class SimpleServer extends Thread {
+
+    private Socket client;
+
+    public SimpleServer(Socket client) {
+        this.client = client;
     }
 
-    private static void handelRequest(Socket client) throws IOException {
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));) {
+    @Override
+    public void run() {
+        handleRequest();
+    }
+
+    private void handleRequest() {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 
 
             StringBuilder str = new StringBuilder("Hello, ");
@@ -35,10 +47,11 @@ public class Server {
             writer.newLine();
             writer.flush();
 
-        } catch (IOException ex) {
 
-        } finally {
             client.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }
+
