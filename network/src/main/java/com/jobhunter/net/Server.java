@@ -37,20 +37,37 @@ class SimpleServer extends Thread {
             BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 
+            String request = reader.readLine();
+            String[] lines = request.split("\\s+");
+            String command = lines[0];
+            String userName = lines[1];
 
-            StringBuilder str = new StringBuilder("Hello, ");
-            String userName = reader.readLine();
-            System.out.println("Get from client: " + userName);
-
-            str.append(userName);
-            writer.write(str.toString());
+            String response = buildResponse(command, userName);
+            writer.write(response);
             writer.newLine();
             writer.flush();
 
+            reader.close();
+            writer.close();
 
             client.close();
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private String buildResponse(String command, String userName) {
+        switch(command) {
+            case "HELLO" :
+                return "Hello " + userName;
+            case "MORNING" :
+                return "Good morning " + userName;
+            case "DAY" :
+                return "Good day " + userName;
+            case "EVENING" :
+                return "Good evening " + userName;
+            default:
+                return "Hi" + userName;
         }
     }
 }
