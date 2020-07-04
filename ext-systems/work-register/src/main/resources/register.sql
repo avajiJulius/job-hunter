@@ -30,6 +30,7 @@ create table wr_person_work (
     person_id integer not null,
     work_start date not null,
     work_end date,
+    partial boolean default false,
     primary key(person_work_id),
     foreign key(last_work_id) references wr_last_work(last_work_id) on delete restrict,
     foreign key(person_id) references wr_person(person_id) on delete restrict
