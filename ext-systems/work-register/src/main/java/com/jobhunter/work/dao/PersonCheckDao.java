@@ -19,12 +19,14 @@ public class PersonCheckDao {
             "and upper(lw.position) = upper(?)" +
             "and lw.work_start = ? ";
 
-    public PersonCheckDao() {
-        try {
-                Class.forName("org.postgresql.Driver");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    private ConnectionBuilder connectionBuilder;
+
+    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
+        this.connectionBuilder = connectionBuilder;
+    }
+
+    private Connection getConnection() throws SQLException{
+        return connectionBuilder.getConnection();
     }
 
     public PersonResponse checkPerson(PersonRequest request) throws PersonCheckException {
@@ -62,8 +64,4 @@ public class PersonCheckDao {
         return response;
     }
 
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:postgresql://localhost/work_register",
-                "postgres", "developer");
-    }
 }

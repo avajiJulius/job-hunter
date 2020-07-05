@@ -22,6 +22,7 @@ public class PersonCheckDaoTest {
         pr.setWorkEnd(LocalDate.of(2020, 2, 7));
 
         PersonCheckDao dao = new PersonCheckDao();
+        dao.setConnectionBuilder(new DirectConnectionBuilder());
         PersonResponse response = dao.checkPerson(pr);
 
 
@@ -41,6 +42,7 @@ public class PersonCheckDaoTest {
         pr.setWorkEnd(null);
 
         PersonCheckDao dao = new PersonCheckDao();
+        dao.setConnectionBuilder(new DirectConnectionBuilder());
         PersonResponse response = dao.checkPerson(pr);
 
 

@@ -1,5 +1,7 @@
+com\jobhunter\work\dao\PoolConnectionBuilder.class
+com\jobhunter\work\exception\PersonCheckException.class
 com\jobhunter\work\dao\PersonCheckDao.class
 com\jobhunter\work\domain\PersonResponse.class
-com\jobhunter\work\exception\PersonCheckException.class
+com\jobhunter\work\dao\ConnectionBuilder.class
 com\jobhunter\work\domain\PersonRequest.class
 com\jobhunter\work\web\CheckPersonServlet.class
