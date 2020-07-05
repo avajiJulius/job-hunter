@@ -19,6 +19,14 @@ public class PersonCheckDao {
             "and upper(lw.position) = upper(?)" +
             "and lw.work_start = ? ";
 
+    public PersonCheckDao() {
+        try {
+                Class.forName("org.postgresql.Driver");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public PersonResponse checkPerson(PersonRequest request) throws PersonCheckException {
         PersonResponse response = new PersonResponse();
 
