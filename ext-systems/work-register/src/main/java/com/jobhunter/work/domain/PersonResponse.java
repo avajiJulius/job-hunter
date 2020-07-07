@@ -20,4 +20,6 @@ public class PersonResponse {
     public void setPartial(boolean partial) {
         this.partial = partial;
     }
+
+
 }

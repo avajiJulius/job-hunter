@@ -25,7 +25,7 @@ public class CheckPersonServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        logger.info("Servlet is created");
+        logger.info("SERVLET IS CREATED");
         dao = new PersonCheckDao();
         dao.setConnectionBuilder(new PoolConnectionBuilder());
     }
