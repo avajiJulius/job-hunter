@@ -1,5 +1,6 @@
 package com.jobhunter.employeeform.dao;
 
+import com.jobhunter.employeeform.config.Config;
 import com.jobhunter.employeeform.domain.*;
 import com.jobhunter.employeeform.exception.DaoException;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,15 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
     private static final String SELECT_JOBS = "select j.* from jh_jobs j " +
             "where j.e_form_id in ";
+
+    private static final String SELECT_FORMS_FULL = "select ef.*, " +
+            "ct.city_name, u.university_name, cr.course_name, j.* " +
+            "from jh_employee_forms ef " +
+            "inner join jh_jobs j on j.e_form_id = ef.e_form_id " +
+            "inner join jh_cities ct on ct.city_id = ef.city_id " +
+            "inner join jh_universities u on u.university_id = ef.university_id " +
+            "inner join jh_courses cr on cr.course_id = ef.course_id " +
+            "where e_form_status = ? order by e_form_id limit ?";
 
 
     public Connection getConnection() throws SQLException {
@@ -111,8 +122,49 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
     @Override
     public List<EmployeeForm> getEmployeeForm() throws DaoException {
-        return getEmployeeFormTwoSelect();
+        //return getEmployeeFormTwoSelect();
+        return getEmployeeFormOneSelect();
     }
+
+    private List<EmployeeForm> getEmployeeFormOneSelect() throws DaoException{
+        List<EmployeeForm> result = new LinkedList<>();
+
+        try(Connection con = getConnection();
+        PreparedStatement stmt = con.prepareStatement(SELECT_FORMS_FULL)) {
+
+            Map<Long, EmployeeForm> maps = new HashMap<>();
+            stmt.setInt(1, FormStatus.UNCHECKED.ordinal());
+            int limit = Integer.parseInt(Config.getProperty(Config.DB_LIMIT));
+            stmt.setInt(2, limit);
+
+            ResultSet rs = stmt.executeQuery();
+            int counter = 0;
+            while(rs.next()) {
+                Long efId = rs.getLong("e_form_id");
+                if(!maps.containsKey(efId)) {
+                    EmployeeForm ef = getFullEmployeeForm(rs);
+                    result.add(ef);
+                    maps.put(efId, ef);
+                }
+
+                EmployeeForm ef = maps.get(rs);
+                ef.addJob(fillJob(rs));
+                counter++;
+            }
+            if(counter >= limit) {
+                result.remove(result.size() - 1);
+            }
+
+            rs.close();
+
+        } catch (SQLException ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new DaoException(ex);
+        }
+
+        return result;
+    }
+
 
     private List<EmployeeForm> getEmployeeFormTwoSelect() throws DaoException {
         List<EmployeeForm> result = new LinkedList<>();
