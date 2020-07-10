@@ -4,6 +4,14 @@ public class Education {
     private University university;
     private Course course;
 
+    public Education() {
+    }
+
+    public Education(University university, Course course) {
+        this.university = university;
+        this.course = course;
+    }
+
     public University getUniversity() {
         return university;
     }

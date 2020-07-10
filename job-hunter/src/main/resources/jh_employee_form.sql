@@ -66,9 +66,9 @@ CREATE TABLE jh_jobs (
 	job_id SERIAL,
 	e_form_id integer not null,
 	organization varchar(40) not null,
+    post varchar(40) not null,
 	work_start date not null,
 	work_end date not null,
-	post varchar(40) not null,
 	PRIMARY KEY(job_id),
 	FOREIGN KEY(e_form_id) REFERENCES jh_employee_forms(e_form_id) ON DELETE RESTRICT
 );

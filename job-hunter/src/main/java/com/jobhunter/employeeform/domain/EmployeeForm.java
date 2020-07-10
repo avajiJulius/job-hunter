@@ -1,6 +1,7 @@
 package com.jobhunter.employeeform.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeForm {
@@ -56,8 +57,11 @@ public class EmployeeForm {
         return jobsList;
     }
 
-    public void setJobsList(List<Job> jobsList) {
-        this.jobsList = jobsList;
+    public void addJob(Job job) {
+        if(jobsList == null) {
+            jobsList = new ArrayList<>(3);
+        }
+        jobsList.add(job);
     }
 
     public String getAbout() {
