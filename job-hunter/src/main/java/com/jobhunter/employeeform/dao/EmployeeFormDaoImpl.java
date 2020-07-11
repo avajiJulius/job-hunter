@@ -22,8 +22,8 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeFormDaoImpl.class);
 
     private static final String INSERT_FORM = "insert into jh_employee_forms(" +
-            "e_form_status, e_form_date, e_form_post, salary, f_name, l_name " +
-            "b_day, city_id, email, profession, schedule_status " +
+            "e_form_status, e_form_date, e_form_post, salary, f_name, l_name, " +
+            "b_day, city_id, email, profession, schedule_status, " +
             "experience, university_id, course_id, about) " +
             "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -36,7 +36,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
             "inner join jh_cities ct on ct.city_id = ef.city_id " +
             "inner join jh_universities u on u.university_id = ef.university_id " +
             "inner join jh_courses cr on cr.course_id = ef.course_id " +
-            "where e_form_status = ? order by e_form_date";
+            "where e_form_status = ? order by ef.e_form_date";
 
     private static final String SELECT_JOBS = "select j.* from jh_jobs j " +
             "where j.e_form_id in ";
@@ -48,7 +48,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
             "inner join jh_cities ct on ct.city_id = ef.city_id " +
             "inner join jh_universities u on u.university_id = ef.university_id " +
             "inner join jh_courses cr on cr.course_id = ef.course_id " +
-            "where e_form_status = ? order by e_form_id limit ?";
+            "where e_form_status = ? order by ef.e_form_id limit ?";
 
 
     public Connection getConnection() throws SQLException {
@@ -83,6 +83,8 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
                 stmt.setLong(13, ef.getEducation().getUniversity().getUniversityId());
                 stmt.setLong(14, ef.getEducation().getCourse().getCourseId());
+
+                stmt.executeUpdate();
 
                 ResultSet rs = stmt.getGeneratedKeys();
                 if(rs.next()) {

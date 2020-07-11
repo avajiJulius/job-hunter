@@ -50,7 +50,7 @@ CREATE TABLE jh_employee_forms (
 	b_day date not null,
 	city_id integer not null,
 	email varchar(30) not null,
-    profession int not null,
+    profession varchar(30) not null,
     schedule_status int not null,
     experience double precision,
     university_id integer not null,

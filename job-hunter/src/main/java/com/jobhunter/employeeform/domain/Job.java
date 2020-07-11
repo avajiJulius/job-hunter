@@ -8,6 +8,16 @@ public class Job {
     private LocalDate workStart;
     private LocalDate workEnd;
 
+    public Job() {
+    }
+
+    public Job(String organization, String post, LocalDate workStart, LocalDate workEnd) {
+        this.organization = organization;
+        this.post = post;
+        this.workStart = workStart;
+        this.workEnd = workEnd;
+    }
+
     public String getOrganization() {
         return organization;
     }

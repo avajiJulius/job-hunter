@@ -1,5 +1,6 @@
 package com.jobhunter.employeeform.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,13 @@ public class Employee extends Person {
     private ScheduleStatus scheduleStatus;
     private double experience;
     private List<Job> jobsList;
+
+    public Employee() {
+    }
+
+    public Employee(String firstName, String lastName, LocalDate birthDay) {
+        super(firstName, lastName, birthDay);
+    }
 
     public String getProfession() {
         return profession;
