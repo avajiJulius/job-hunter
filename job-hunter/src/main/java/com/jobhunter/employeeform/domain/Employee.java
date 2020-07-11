@@ -1,11 +1,13 @@
 package com.jobhunter.employeeform.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Employee extends Person {
     private String profession;
     private ScheduleStatus scheduleStatus;
     private double experience;
-    private double salary;
-    private Education education;
+    private List<Job> jobsList;
 
     public String getProfession() {
         return profession;
@@ -31,20 +33,14 @@ public class Employee extends Person {
         this.experience = experience;
     }
 
-    public double getSalary() {
-        return salary;
+    public List<Job> getJobsList() {
+        return jobsList;
     }
 
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
-
-    public Education getEducation() {
-        return education;
-    }
-
-    public void setEducation(Education education) {
-        this.education = education;
+    public void addJob(Job job) {
+        if(jobsList == null) {
+            jobsList = new ArrayList<>(3);
+        }
+        jobsList.add(job);
     }
 }

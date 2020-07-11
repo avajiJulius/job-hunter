@@ -41,9 +41,10 @@ insert into jh_courses(course_id, course_name) values
 
 CREATE TABLE jh_employee_forms (
 	e_form_id SERIAL,
+    e_form_status int not null,
+    e_form_date timestamp not null,
 	e_form_post varchar(50) not null,
-	e_form_status int not null,
-	e_form_date timestamp not null,
+    salary double precision,
 	f_name varchar(15) not null,
 	l_name varchar(20) not null,
 	b_day date not null,
@@ -52,7 +53,6 @@ CREATE TABLE jh_employee_forms (
     profession int not null,
     schedule_status int not null,
     experience double precision,
-    salary double precision,
     university_id integer not null,
     course_id integer not null,
 	about text,

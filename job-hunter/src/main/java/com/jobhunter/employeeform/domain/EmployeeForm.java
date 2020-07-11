@@ -1,16 +1,15 @@
 package com.jobhunter.employeeform.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EmployeeForm {
     private Long employeeFormId;
-    private String post;
     private FormStatus status;
     private LocalDateTime formDate;
+    private String post;
+    private double salary;
     private Employee employee;
-    private List<Job> jobsList;
+    private Education education;
     private String about;
 
     public Long getEmployeeFormId() {
@@ -21,6 +20,14 @@ public class EmployeeForm {
         this.employeeFormId = employeeFormId;
     }
 
+    public FormStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FormStatus status) {
+        this.status = status;
+    }
+
     public String getPost() {
         return post;
     }
@@ -29,12 +36,12 @@ public class EmployeeForm {
         this.post = post;
     }
 
-    public FormStatus getStatus() {
-        return status;
+    public double getSalary() {
+        return salary;
     }
 
-    public void setStatus(FormStatus status) {
-        this.status = status;
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 
     public LocalDateTime getFormDate() {
@@ -53,15 +60,12 @@ public class EmployeeForm {
         this.employee = employee;
     }
 
-    public List<Job> getJobsList() {
-        return jobsList;
+    public Education getEducation() {
+        return education;
     }
 
-    public void addJob(Job job) {
-        if(jobsList == null) {
-            jobsList = new ArrayList<>(3);
-        }
-        jobsList.add(job);
+    public void setEducation(Education education) {
+        this.education = education;
     }
 
     public String getAbout() {

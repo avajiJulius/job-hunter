@@ -5,11 +5,11 @@
             maxActive="4"
             maxIdle="2"
             maxWait="5000"
-            name="jdbc/workRegister"
+            name="jdbc/jobRegister"
             username="postgres"
             password="developer"
             type="javax.sql.DataSource"
-            url="jdbc:postgresql://localhost/work_register"
+            url="jdbc:postgresql://localhost/job_register"
             validationQuery="SELECT 1">
     </Resource>
 </Context>

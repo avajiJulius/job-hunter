@@ -22,9 +22,9 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeFormDaoImpl.class);
 
     private static final String INSERT_FORM = "insert into jh_employee_forms(" +
-            "e_form_post, e_form_status, e_form_date, f_name, l_name " +
+            "e_form_status, e_form_date, e_form_post, salary, f_name, l_name " +
             "b_day, city_id, email, profession, schedule_status " +
-            "experience, salary, university_id, course_id, about) " +
+            "experience, university_id, course_id, about) " +
             "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private static final String INSERT_JOB = "insert into jh_jobs(" +
@@ -64,24 +64,25 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
             con.setAutoCommit(false);
             try{
-                stmt.setString(1, ef.getPost());
-                stmt.setInt(2, FormStatus.UNCHECKED.ordinal());
-                stmt.setTimestamp(3, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+                stmt.setInt(1, FormStatus.UNCHECKED.ordinal());
+                stmt.setTimestamp(2, java.sql.Timestamp.valueOf(LocalDateTime.now()));
+                stmt.setString(3, ef.getPost());
+                stmt.setDouble(4, ef.getSalary());
                 stmt.setString(15, ef.getAbout());
 
                 //Employee Data
                 Employee e = ef.getEmployee();
-                stmt.setString(4, e.getFirstName());
-                stmt.setString(5, e.getLastName());
-                stmt.setDate(6, java.sql.Date.valueOf(e.getBirthDay()));
-                stmt.setLong(7, e.getCurrentCity().getCityId());
-                stmt.setString(8, e.getEmail());
-                stmt.setString(9, e.getProfession());
-                stmt.setInt(10, ScheduleStatus.UNSELECTED.ordinal());
-                stmt.setDouble(11, e.getExperience());
-                stmt.setDouble(12, e.getSalary());
-                stmt.setLong(13, e.getEducation().getUniversity().getUniversityId());
-                stmt.setLong(14, e.getEducation().getCourse().getCourseId());
+                stmt.setString(5, e.getFirstName());
+                stmt.setString(6, e.getLastName());
+                stmt.setDate(7, java.sql.Date.valueOf(e.getBirthDay()));
+                stmt.setLong(8, e.getCurrentCity().getCityId());
+                stmt.setString(9, e.getEmail());
+                stmt.setString(10, e.getProfession());
+                stmt.setInt(11, ScheduleStatus.UNSELECTED.ordinal());
+                stmt.setDouble(12, e.getExperience());
+
+                stmt.setLong(13, ef.getEducation().getUniversity().getUniversityId());
+                stmt.setLong(14, ef.getEducation().getCourse().getCourseId());
 
                 ResultSet rs = stmt.getGeneratedKeys();
                 if(rs.next()) {
@@ -108,7 +109,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
     private void saveJob(Connection con, EmployeeForm ef, Long efId) throws SQLException{
         try(PreparedStatement stmt = con.prepareStatement(INSERT_JOB)) {
-            for(Job job : ef.getJobsList()) {
+            for(Job job : ef.getEmployee().getJobsList()) {
                 stmt.setLong(1, efId);
                 stmt.setString(2, job.getOrganization());
                 stmt.setString(3, job.getPost());
@@ -148,7 +149,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
                 }
 
                 EmployeeForm ef = maps.get(rs);
-                ef.addJob(fillJob(rs));
+                ef.getEmployee().addJob(fillJob(rs));
                 counter++;
             }
             if(counter >= limit) {
@@ -204,10 +205,21 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
 
     private void fillEmployeeFrom(ResultSet rs, EmployeeForm ef) throws SQLException {
         ef.setEmployeeFormId(rs.getLong("e_form_id"));
-        ef.setPost(rs.getString("e_form_post"));
         ef.setStatus(FormStatus.fromValue(rs.getInt("e_form_status")));
         ef.setFormDate(rs.getTimestamp("e_form_date").toLocalDateTime());
+        ef.setPost(rs.getString("e_form_post"));
+        ef.setSalary(rs.getDouble("salary"));
         ef.setAbout(rs.getString("about"));
+
+        //Education
+        Long universityId = rs.getLong("university_id");
+        String universityName = rs.getString("university_name");
+        University university = new University(universityId, universityName);
+        Long courseId = rs.getLong("course_id");
+        String courseName = rs.getString("course_name");
+        Course course = new Course(courseId, courseName);
+        Education education = new Education(university, course);
+        ef.setEducation(education);
     }
 
     private Employee fillEmployee(ResultSet rs) throws SQLException {
@@ -228,17 +240,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
     e.setProfession(rs.getString("profession"));
     e.setScheduleStatus(ScheduleStatus.fromValue(rs.getInt("schedule_status")));
     e.setExperience(rs.getDouble("experience"));
-    e.setSalary(rs.getDouble("salary"));
 
-    //Education
-    Long universityId = rs.getLong("university_id");
-    String universityName = rs.getString("university_name");
-    University university = new University(universityId, universityName);
-    Long courseId = rs.getLong("course_id");
-    String courseName = rs.getString("course_name");
-    Course course = new Course(courseId, courseName);
-    Education education = new Education(university, course);
-    e.setEducation(education);
 
     return e;
     }
@@ -255,7 +257,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
             while(rs.next()) {
                 Job job = fillJob(rs);
                 EmployeeForm ef = maps.get(rs.getLong("e_form_id"));
-                ef.addJob(job);
+                ef.getEmployee().addJob(job);
             }
         }
     }
