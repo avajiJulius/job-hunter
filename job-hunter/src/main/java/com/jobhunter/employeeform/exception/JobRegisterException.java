@@ -1,19 +1,20 @@
 package com.jobhunter.employeeform.exception;
 
 public class JobRegisterException extends Exception {
-    public JobRegisterException() {
-        super();
-    }
 
-    public JobRegisterException(String message) {
+    private String code;
+
+    public JobRegisterException(String message, String code) {
         super(message);
+        this.code = code;
     }
 
-    public JobRegisterException(String message, Throwable cause) {
+    public JobRegisterException(String message, Throwable cause, String code) {
         super(message, cause);
+        this.code = code;
     }
 
-    public JobRegisterException(Throwable cause) {
-        super(cause);
+    public String getCode() {
+        return code;
     }
 }

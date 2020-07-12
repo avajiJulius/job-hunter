@@ -40,8 +40,9 @@ public class EmployeeFormDaoImplTest {
         e.setScheduleStatus(ScheduleStatus.fromValue(2));
         e.setExperience(2.1);
 
-        Job job = new Job("Yat", "administrator", LocalDate.of(2018, 9, 15),
-                LocalDate.of(2020, 2, 7));
+        Job job = new Job("Yat", "administrator");
+        job.setWorkStart(LocalDate.of(2018, 9, 15));
+        job.setWorkEnd(LocalDate.of(2020, 2, 7));
         e.addJob(job);
 
         Education education = new Education(new University(1L, "Herzen University")

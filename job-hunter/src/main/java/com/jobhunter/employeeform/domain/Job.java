@@ -11,11 +11,9 @@ public class Job {
     public Job() {
     }
 
-    public Job(String organization, String post, LocalDate workStart, LocalDate workEnd) {
+    public Job(String organization, String post) {
         this.organization = organization;
         this.post = post;
-        this.workStart = workStart;
-        this.workEnd = workEnd;
     }
 
     public String getOrganization() {

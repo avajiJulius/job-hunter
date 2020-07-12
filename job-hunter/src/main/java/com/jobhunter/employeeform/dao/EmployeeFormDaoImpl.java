@@ -116,7 +116,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
                 stmt.setString(2, job.getOrganization());
                 stmt.setString(3, job.getPost());
                 stmt.setDate(4,java.sql.Date.valueOf(job.getWorkStart()));
-                stmt.setDate(5,java.sql.Date.valueOf(job.getWorkStart()));
+                stmt.setDate(5,java.sql.Date.valueOf(job.getWorkEnd()));
                 stmt.addBatch();
             }
             stmt.executeBatch();
@@ -150,7 +150,7 @@ public class EmployeeFormDaoImpl implements EmployeeFormDao {
                     maps.put(efId, ef);
                 }
 
-                EmployeeForm ef = maps.get(rs);
+                EmployeeForm ef = maps.get(efId);
                 ef.getEmployee().addJob(fillJob(rs));
                 counter++;
             }

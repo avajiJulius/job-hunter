@@ -12,13 +12,13 @@ import java.util.List;
 
 public class EmployeeFormValidator {
     private JobRegisterValidator jobVal;
-    private MailSenderValidator mailVal;
-    private EducationRegisterValidator educationVal;
+//    private MailSenderValidator mailVal;
+//    private EducationRegisterValidator educationVal;
 
     public EmployeeFormValidator() {
         jobVal = new JobRegisterValidator();
-        mailVal = new MailSenderValidator();
-        educationVal = new EducationRegisterValidator();
+//        mailVal = new MailSenderValidator();
+//        educationVal = new EducationRegisterValidator();
     }
 
     public static void main(String[] args){
