@@ -1,5 +1,6 @@
 package com.jobhunter.employeeform.validator.register;
 
+import com.jobhunter.employeeform.config.Config;
 import com.jobhunter.employeeform.domain.Employee;
 import com.jobhunter.employeeform.domain.register.JobRegisterRequest;
 import com.jobhunter.employeeform.domain.register.JobRegisterResponse;
@@ -13,14 +14,18 @@ import javax.ws.rs.core.MediaType;
 public class RealJobRegisterChecker implements JobRegisterChecker {
     @Override
     public JobRegisterResponse checkEmployee(Employee employee) throws JobRegisterException {
-        JobRegisterRequest request = new JobRegisterRequest(employee);
+        try {
+            JobRegisterRequest request = new JobRegisterRequest(employee);
 
-        Client client = ClientBuilder.newClient();
-        JobRegisterResponse response = client.target("http://localhost:8080/job-register-1.0/rest/check/")
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(request, MediaType.APPLICATION_JSON))
-                .readEntity(JobRegisterResponse.class);
 
-        return response;
+            Client client = ClientBuilder.newClient();
+            JobRegisterResponse response = client.target(Config.getProperty(Config.JR_URL))
+                    .request(MediaType.APPLICATION_JSON)
+                    .post(Entity.entity(request, MediaType.APPLICATION_JSON))
+                    .readEntity(JobRegisterResponse.class);
+            return response;
+        } catch (Exception ex) {
+            throw new JobRegisterException(ex.getMessage(), ex, "13");
+        }
     }
 }
