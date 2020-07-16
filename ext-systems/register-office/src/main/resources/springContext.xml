@@ -1,0 +1,18 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dao" class="com.jobhunter.register.dao.EmploymentDao">
+        <property name="test" value="SIMPLE"/>
+    </bean>
+
+    <bean id="manager" class="com.jobhunter.register.buisness.EmploymentManager">
+        <property name="employmentDao" ref="dao"/>
+    </bean>
+
+    <bean id="controller" class="com.jobhunter.register.rest.EmploymentController">
+        <property name="employmentManager" ref="manager"/>
+    </bean>
+
+</beans>
